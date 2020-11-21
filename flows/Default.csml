@@ -1,0 +1,21 @@
+start:
+  say "Welcome to CSML Insurances!"
+  goto triage
+
+triage:
+  // Propose a few options for the user
+  say "To open a case, please press 1."
+  say "To get information about an existing case, press 2."
+  say "To subscribe to a new policy, press 3."
+
+  // Wait for user input
+  hold
+
+  // Triage action depending on user input
+  if (event == 1) goto flow CreateCase
+  if (event == 2) goto flow GetCase
+  if (event == 3) goto flow SubscribePolicy
+
+  // User typed or said something else, let's ask again
+  say "I'm sorry, I did not understand your input!"
+  goto triage

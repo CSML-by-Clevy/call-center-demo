@@ -1,0 +1,43 @@
+start:
+  // Make sure that we have the right customer
+  say "To authenticate your call, please enter your customer number."
+  hold
+
+  // Run a query to retrieve the customer information from your CRM.
+  // This needs to be adapted to your actual use case!
+  remember customer = Fn("my_custom_CRM", action="get_customer", customer_id=event)
+
+  // If the customer does not exist or the phone number doesn't match,
+  // you can for example reject the call here.
+  // For this example, let's just imagine that everything is fine!
+  if (!customer) {
+    say "I'm sorry, it seems that you are not registered in our systems. Goodbye!"
+    goto end
+  }
+
+  goto get_case_status
+
+get_case_status:
+  say "Please enter your Case ID."
+  hold
+
+  // Call our custom CRM to find more information about the given case
+  do customer_case = Fn(
+    "my_custom_CRM",
+    action="get_case",
+    customer_id=customer.id,
+    case_id=event
+  )
+
+  // Error handling: the user might have given a wrong case ID!
+  if (!customer_case) {
+    say "I'm sorry, I can't find a case with ID {{event}}."
+    goto get_case_status
+  }
+
+  // The case contains some information. For demo, let's just tell
+  // the user what the status is, but obviously we could easily
+  // continue the conversation from there!
+  say "The status of your case is: {{customer_case.status}}. Please check in later for updates!"
+  say "Goodbye!"
+  goto end

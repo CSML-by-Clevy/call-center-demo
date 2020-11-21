@@ -1,0 +1,56 @@
+start:
+  // Make sure that we have the right customer
+  say "To authenticate your call, please enter your customer number."
+  hold
+
+  // Run a query to retrieve the customer information from your CRM.
+  // This needs to be adapted to your actual use case!
+  remember customer = Fn("my_custom_CRM", action="get_customer", customer_id=event)
+
+  // If the customer does not exist or the phone number doesn't match,
+  // you can for example reject the call here.
+  // For this example, let's just imagine that everything is fine!
+  if (!customer) {
+    say "I'm sorry, it seems that you are not registered in our systems. Goodbye!"
+    goto end
+  }
+
+  goto select_policy
+
+select_policy:
+  // Let the user know what type of policy they want to open a case with
+  do policies = customer.policies
+  foreach (policy, index) in policies {
+    say "To declare an issue with your {{policy.type}} policy, type {{index}}."
+  }
+  hold
+
+  // Make sure they did select a valid policy
+  if (event >= policies.length() || !event.is_number()) {
+    say "I'm sorry, I didn't understand your input."
+    goto select_policy
+  }
+
+  remember selected_policy = policies[event.to_int()]
+
+  say "Thank you!"
+  goto describe_case
+  
+describe_case:
+  // We can use Automatic Speech Recognition to let the user describe their problem
+  say "Please describe your case in a few words."
+  hold
+  
+  // The user's input will be returned as text and can be used immediately
+  // in the case creation
+  do Fn(
+    "my_custom_CRM",
+    action="create_case",
+    customer_id=customer.id,
+    policy_id=selected_policy.id,
+    case_data=event
+  )
+
+  say "Thank you for reporting your issue! We will be in touch with you."
+  say "Goodbye!"
+  goto end

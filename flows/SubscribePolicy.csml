@@ -1,0 +1,25 @@
+start:
+  say "What would you like to get insured?"
+  say "If you would like to insure your appartment, house or farm, say \"home\"."
+  say "If you would like to insure your car or motorcycle, say \"car\"."
+  hold
+
+  // Let's use ASR for this request. We could also have used keypad inputs!
+  if (event == "car") goto insure_car
+  if (event == "home") goto insure_home
+  
+  say "I'm sorry, I didn't understand your input."
+  goto start
+
+insure_car:
+  // The CallForwarding action lets your forward the call to a different number
+  // This number may be a callbot as well, or a live agent.
+  say "Let me redirect you to an agent in charge of Car insurances."
+  say CallForwarding("+123456789")
+  goto end
+
+insure_home:
+  // Same thing, but with a different number to reach a different service!
+  say "An agent specialized in home insurances will help you with your request."
+  say CallForwarding("+987654321")
+  goto end

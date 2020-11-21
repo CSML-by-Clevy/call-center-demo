@@ -1,0 +1,42 @@
+{
+  "id": "f675c5d0-1274-4cd2-90f3-6f845ee5d65f",
+  "name": "CallCenterDemo",
+  "description": null,
+  "default_flow": "Default",
+  "flows": [
+    {
+      "name": "CreateCase",
+      "description": "Simple barebones flow. Code your own chatbot from this template!",
+      "commands": []
+    },
+    {
+      "name": "Default",
+      "description": "Simple barebones flow. Code your own chatbot from this template!",
+      "commands": []
+    },
+    {
+      "name": "GetCase",
+      "description": "Simple barebones flow. Code your own chatbot from this template!",
+      "commands": []
+    },
+    {
+      "name": "SubscribePolicy",
+      "description": "Simple barebones flow. Code your own chatbot from this template!",
+      "commands": []
+    }
+  ],
+  "files": [],
+  "functions": [
+    {
+      "name": "my_custom_CRM",
+      "description": null,
+      "args": [],
+      "runtime": "nodejs12.x",
+      "handler": "index.handler",
+      "environment": {},
+      "app_id": null,
+      "version": null
+    }
+  ],
+  "apps": []
+}
